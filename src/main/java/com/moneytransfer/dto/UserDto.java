@@ -11,7 +11,6 @@ import lombok.ToString;
 public final class UserDto {
     /** Персональные данные пользователя */
     private final PersonDto person;
-
     /** Email */
     private final String email;
 }

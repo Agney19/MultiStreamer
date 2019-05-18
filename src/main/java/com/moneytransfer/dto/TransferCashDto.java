@@ -1,5 +1,7 @@
 package com.moneytransfer.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,7 +15,9 @@ public final class TransferCashDto extends CashDto {
     /** Идентификатор пользователя, которому совершается перевод денег */
     private final Long toUserId;
 
-    public TransferCashDto(BigDecimal cash, long toUserId) {
+    @JsonCreator
+    public TransferCashDto(@JsonProperty("cash") BigDecimal cash,
+                           @JsonProperty("toUserId") Long toUserId) {
         super(cash);
         this.toUserId = toUserId;
     }

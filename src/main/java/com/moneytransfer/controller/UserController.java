@@ -5,6 +5,7 @@ import com.moneytransfer.dto.TransferCashDto;
 import com.moneytransfer.dto.UserDto;
 import com.moneytransfer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +21,13 @@ public class UserController {
 
     /** Изменить счет пользователя */
     @PostMapping("{userId}/cash")
-    public void transferCash(@PathVariable("userId") long userId,
+    public void transferCash(@PathVariable("userId") long fromUserId,
                              @RequestBody TransferCashDto dto) {
-        userService.transferCash(userId, dto);
+        userService.transferCash(fromUserId, dto);
     }
 
     /** Получить счет пользователя */
-    @GetMapping("{userId}/cash")
+    @GetMapping(value = "{userId}/cash", produces = MediaType.APPLICATION_JSON_VALUE)
     public CashDto getCash(@PathVariable("userId") long userId) {
         return userService.getCash(userId);
     }

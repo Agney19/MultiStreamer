@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /** Сервис по работе с пользователями */
 @Service
@@ -21,7 +22,7 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    /** Совершить перевод денег со счета пользователя на счет другого */
+    /** Совершить перевод денег со счета одного пользователя на счет другого */
     @Transactional
     public void transferCash(long fromUserId, TransferCashDto dto) {
         BigDecimal cashChange = dto.getCash();
@@ -30,8 +31,12 @@ public class UserService {
         Assert.isTrue(cashChange.compareTo(BigDecimal.ZERO) >= 0,
                 "Сумма перевода должна быть больше 0");
 
-        updateCash(cashChange, dto.getToUserId());
-        updateCash(cashChange.negate(), fromUserId);
+        User fromUser = Optional.ofNullable(userDao.findById(fromUserId))
+                .orElseThrow(() -> new IllegalArgumentException("Инициатор перевода не найден"));
+        User toUser = Optional.ofNullable(userDao.findById(dto.getToUserId()))
+                .orElseThrow(() -> new IllegalArgumentException("Адресат перевода не найден"));
+        updateCash(cashChange, toUser, fromUser, toUser);
+        updateCash(cashChange.negate(), fromUser, fromUser, toUser);
     }
 
     /** Создать пользователя */
@@ -41,6 +46,7 @@ public class UserService {
         Person person = new Person();
         PersonDto personDto = dto.getPerson();
         fillPerson(person, personDto);
+		user.setPerson(person);
         user.setEmail(dto.getEmail());
         user.setAccount(new Account());
         userDao.save(user);
@@ -56,11 +62,11 @@ public class UserService {
     }
 
     /** Изменить счет пользователя */
-    private void updateCash(BigDecimal cash, long userId) {
-        User user = userDao.findById(userId);
-        Assert.notNull(user, String.format("Пользователь с id %s не найден", userId));
-        Account account = user.getAccount();
-        account.changeAccount(cash, user);
+    private void updateCash(BigDecimal cash, User accountHost, User fromUser, User toUser) {
+        Assert.isTrue(accountHost == fromUser || accountHost == toUser, "Неверный владелец счета");
+
+        Account account = accountHost.getAccount();
+        account.changeAccount(cash, fromUser, toUser);
     }
 
     private void fillPerson(Person person, PersonDto dto) {

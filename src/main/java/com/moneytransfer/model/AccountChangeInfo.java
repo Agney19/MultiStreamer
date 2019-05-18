@@ -21,7 +21,11 @@ public class AccountChangeInfo extends AbstractModel {
     @Column(name = "update_time", nullable = false)
     private LocalDateTime updateTime = LocalDateTime.now();
 
-    /** Инициатор изменения счета */
+    /** Пользователь, кто переводит деньги */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User initiator;
+    private User fromUser;
+
+    /** Пользователь, кому переводятся деньги */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User toUser;
 }

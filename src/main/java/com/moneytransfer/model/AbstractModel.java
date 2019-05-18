@@ -1,15 +1,11 @@
 package com.moneytransfer.model;
 
-import org.hibernate.annotations.TypeDef;
-
 import javax.persistence.*;
 import java.util.Optional;
 import java.util.UUID;
 
 @MappedSuperclass
 public abstract class AbstractModel {
-    protected static final int BATCH_SIZE = 25;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

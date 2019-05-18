@@ -1,5 +1,6 @@
 package com.moneytransfer.model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +13,6 @@ import java.util.List;
 
 /** Аккаунт (счет пользователя) */
 @Getter
-@Setter
 @Entity
 @Table(name = "account")
 public class Account extends AbstractModel {
@@ -21,30 +21,30 @@ public class Account extends AbstractModel {
     private BigDecimal cash = BigDecimal.ZERO;
 
     /** История изменения счета */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "account_id", nullable = false)
     private List<AccountChangeInfo> changes = new ArrayList<>();
 
-    public void changeAccount(BigDecimal cashChange, User initiator) {
+    public void changeAccount(BigDecimal cashChange, User fromUser, User toUser) {
         Assert.notNull(cashChange, "cashChange is null");
-        Assert.notNull(initiator, "initiator is null");
+        Assert.notNull(fromUser, "fromUser is null");
+        Assert.notNull(toUser, "toUser is null");
 
         updateCash(cashChange);
-        addHistory(cashChange, initiator);
+        addHistory(cashChange, fromUser, toUser);
     }
 
     private void updateCash(BigDecimal cashChange) {
         BigDecimal resultCash = cash.add(cashChange);
-        if (resultCash.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("На счету недостаточно средств");
-        }
+        Assert.isTrue(resultCash.compareTo(BigDecimal.ZERO) >= 0, "На счету недостаточно средств");
         cash = resultCash;
     }
 
-    private void addHistory(BigDecimal cashChange, User initiator) {
+    private void addHistory(BigDecimal cashChange, User fromUser, User toUser) {
         AccountChangeInfo info = new AccountChangeInfo();
         info.setChange(cashChange);
-        info.setInitiator(initiator);
+        info.setFromUser(fromUser);
+        info.setToUser(toUser);
         changes.add(info);
     }
 }
