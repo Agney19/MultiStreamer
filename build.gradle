@@ -1,0 +1,58 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+ext {
+    commonsLang3Version = '3.5'
+    c3p0Version = '0.9.2.1'
+    commonsIoVersion = '2.5'
+    commonsCollections4Version = '4.1'
+    flyingSaucerVersion = '9.0.8'
+    itextVersion = '2.1.7'
+    jacksonCsvVersion = '2.9.5'
+    javaxWsRsVersion = '1.1.1'
+    jetbrainsAnnotationsVersion = '15.0'
+    httpClientVersion = '4.5.5'
+    logstashLogbackEncoder = '4.11'
+    lombokVersion = '1.16.16'
+    mapstructVersion = '1.3.0.Final'
+    mockitoVersion = '2.15.0'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.projectlombok:lombok:' + lombokVersion,
+            'org.apache.commons:commons-lang3:' + commonsLang3Version,
+            'commons-io:commons-io:' + commonsIoVersion,
+            'org.jetbrains:annotations:' + jetbrainsAnnotationsVersion,
+            'org.apache.commons:commons-collections4:' + commonsCollections4Version
+
+    compileOnly 'org.projectlombok:lombok:' + lombokVersion
+
+    compile 'org.jetbrains:annotations:' + jetbrainsAnnotationsVersion
+
+    annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
+
+    testImplementation 'junit:junit',
+            'org.springframework.boot:spring-boot-starter-test',
+            'com.h2database:h2',
+            'org.assertj:assertj-core'
+}
