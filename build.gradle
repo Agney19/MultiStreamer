@@ -24,6 +24,15 @@ ext {
     lombokVersion = '1.16.16'
     mapstructVersion = '1.3.0.Final'
     mockitoVersion = '2.15.0'
+    youtubeVersion = 'v3-rev182-1.22.0'
+    youtubeAnalyticsVersion = 'v1-rev63-1.22.0'
+    youtubeReportingVersion = 'v1-rev10-1.22.0'
+    httpVersion = '1.20.0'
+    oauthVersion = '1.20.0'
+    buildSourceEncoding = 'UTF-8'
+    jacksonMapperVersion = '1.9.4'
+    googleCollectionsVersion = '1.0'
+    ffmpegVersion = '0.6.2'
 }
 
 configurations {
@@ -43,7 +52,20 @@ dependencies {
             'org.apache.commons:commons-lang3:' + commonsLang3Version,
             'commons-io:commons-io:' + commonsIoVersion,
             'org.jetbrains:annotations:' + jetbrainsAnnotationsVersion,
-            'org.apache.commons:commons-collections4:' + commonsCollections4Version
+            'org.apache.commons:commons-collections4:' + commonsCollections4Version,
+            // YouTube Data V3 support
+            'com.google.apis:google-api-services-youtube:' + youtubeVersion,
+            // Required for any code that makes calls to the YouTube Analytics API
+            'com.google.apis:google-api-services-youtubeAnalytics:' + youtubeAnalyticsVersion,
+            // Required for any code that makes calls to the YouTube Reporting API
+            'com.google.apis:google-api-services-youtubereporting:' + youtubeReportingVersion,
+            // This dependency is only used for the Topics API sample, which requires the Jackson JSON parser
+            'org.codehaus.jackson:jackson-mapper-asl:' + jacksonMapperVersion,
+            'com.google.http-client:google-http-client-jackson2:' + httpVersion,
+            'com.google.oauth-client:google-oauth-client-jetty:' + oauthVersion,
+            'com.google.collections:google-collections:' + googleCollectionsVersion,
+            'net.bramp.ffmpeg:ffmpeg:' + ffmpegVersion
+
 
     compileOnly 'org.projectlombok:lombok:' + lombokVersion
 
@@ -58,7 +80,7 @@ dependencies {
             'org.assertj:assertj-core'
 }
 
-jar{
-	baseName = 'money-transfer'
-	version = '1'
+jar {
+    baseName = 'money-transfer'
+    version = '1'
 }

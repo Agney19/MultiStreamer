@@ -8,11 +8,13 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
-/** Информация об счете */
 @Getter
 @ToString
 @AllArgsConstructor
-public class CashDto {
-    /** Счет */
-    private final BigDecimal cash;
+public final class BroadcastInfoDto {
+    private String broadcastTitle;
+    private String streamTitle;
+    // new DateTime("2019-06-03T12:28:00.000Z")
+    private String startDateTime;
+    private String endDateTime;
 }

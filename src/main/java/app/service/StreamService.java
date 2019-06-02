@@ -1,76 +1,48 @@
 package app.service;
 
-import app.dto.PersonDto;
-import app.dto.UserDto;
-import app.model.Account;
-import app.model.Person;
-import app.dal.UserDao;
-import app.dto.CashDto;
-import app.dto.TransferCashDto;
-import app.model.User;
+import app.dto.BroadcastInfoDto;
+import app.dto.StreamInfoDto;
+import app.manager.BroadcastManager;
+import net.bramp.ffmpeg.FFmpeg;
+import net.bramp.ffmpeg.FFmpegExecutor;
+import net.bramp.ffmpeg.FFprobe;
+import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import net.bramp.ffmpeg.job.FFmpegJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-/** Сервис по работе с пользователями */
 @Service
 public class StreamService {
     @Autowired
-    private UserDao userDao;
+    private BroadcastManager broadcastManager;
 
-    /** Совершить перевод денег со счета одного пользователя на счет другого */
-    @Transactional
-    public void transferCash(long fromUserId, TransferCashDto dto) {
-        BigDecimal cashChange = dto.getCash();
-        Assert.notNull(cashChange, "Сумма перевода не задана");
-
-        Assert.isTrue(cashChange.compareTo(BigDecimal.ZERO) >= 0,
-                "Сумма перевода должна быть больше 0");
-
-        User fromUser = Optional.ofNullable(userDao.findById(fromUserId))
-                .orElseThrow(() -> new IllegalArgumentException("Инициатор перевода не найден"));
-        User toUser = Optional.ofNullable(userDao.findById(dto.getToUserId()))
-                .orElseThrow(() -> new IllegalArgumentException("Адресат перевода не найден"));
-        updateCash(cashChange, toUser, fromUser, toUser);
-        updateCash(cashChange.negate(), fromUser, fromUser, toUser);
+    public void createBroadcast(BroadcastInfoDto dto) {
+        broadcastManager.createBroadcast(dto);
     }
 
-    /** Создать пользователя */
-    @Transactional
-    public void createUser(UserDto dto) {
-        User user = new User();
-        Person person = new Person();
-        PersonDto personDto = dto.getPerson();
-        fillPerson(person, personDto);
-		user.setPerson(person);
-        user.setEmail(dto.getEmail());
-        user.setAccount(new Account());
-        userDao.save(user);
+    public void startStream(StreamInfoDto dto) {
+        try {
+            FFmpeg ffmpeg = new FFmpeg();
+            FFprobe ffprobe = new FFprobe();
+            FFmpegBuilder builder = new FFmpegBuilder()
+                    .setInput(dto.getInputUrl())
+                    .addOutput(dto.getOutputUrl())
+                    .setFormat("flv")
+                    .setAudioCodec("copy")
+                    .setVideoCodec("copy")
+                    .done();
+            FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+            FFmpegJob job = executor.createJob(builder);
+            job.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    /** Получить счет пользователя */
-    @Transactional(readOnly = true)
-    public CashDto getCash(long userId) {
-        User user = userDao.findById(userId);
-        Assert.notNull(user, "Пользователь не найден");
-
-        return new CashDto(user.getAccount().getCash());
-    }
-
-    /** Изменить счет пользователя */
-    private void updateCash(BigDecimal cash, User accountHost, User fromUser, User toUser) {
-        Assert.isTrue(accountHost == fromUser || accountHost == toUser, "Неверный владелец счета");
-
-        Account account = accountHost.getAccount();
-        account.changeAccount(cash, fromUser, toUser);
-    }
-
-    private void fillPerson(Person person, PersonDto dto) {
-        person.setName(dto.getName());
-        person.setSurname(dto.getSurname());
+    public void finishStream() {
+        final Thread thread = Thread.currentThread();
+        if(!thread.isInterrupted()) {
+            thread.interrupt();
+        }
     }
 }
