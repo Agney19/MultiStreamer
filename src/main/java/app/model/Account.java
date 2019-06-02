@@ -1,9 +1,6 @@
-package com.moneytransfer.model;
+package app.model;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;

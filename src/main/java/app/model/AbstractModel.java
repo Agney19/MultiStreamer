@@ -1,4 +1,4 @@
-package com.moneytransfer.model;
+package app.model;
 
 import javax.persistence.*;
 import java.util.Optional;

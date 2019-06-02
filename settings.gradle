@@ -3,4 +3,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = 'money-transfer'
+rootProject.name = 'yt_streamer'

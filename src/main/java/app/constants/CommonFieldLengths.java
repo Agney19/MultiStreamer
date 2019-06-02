@@ -1,4 +1,4 @@
-package com.moneytransfer.constants;
+package app.constants;
 
 /** Список длин строковых полей в сущностях */
 public class CommonFieldLengths {

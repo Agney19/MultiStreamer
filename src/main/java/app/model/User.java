@@ -1,9 +1,8 @@
-package com.moneytransfer.model;
+package app.model;
 
-import com.moneytransfer.constants.CommonFieldLengths;
+import app.constants.CommonFieldLengths;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.moneytransfer.dto;
+package app.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,6 @@
-package com.moneytransfer.dal;
+package app.dal;
 
-import com.moneytransfer.model.User;
+import app.model.User;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.repository.Repository;
 
