@@ -13,22 +13,5 @@ public class YtStreamerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(YtStreamerApplication.class, args);
-
-//        try {
-//            FFmpeg ffmpeg = new FFmpeg();
-//            FFprobe ffprobe = new FFprobe();
-//            FFmpegBuilder builder = new FFmpegBuilder()
-//                    .setInput("rtmp://127.0.0.1:1935/live")
-//                    .addOutput("rtmp://a.rtmp.youtube.com/live2/7ave-fwdq-md2p-18c2")
-//                    .setFormat("flv")
-//                    .setAudioCodec("copy")
-//                    .setVideoCodec("copy")
-//                    .done();
-//            FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
-//            FFmpegJob job = executor.createJob(builder);
-//            job.run();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 }

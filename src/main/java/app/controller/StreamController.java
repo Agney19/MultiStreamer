@@ -24,7 +24,7 @@ public class StreamController {
     }
 
     @DeleteMapping("stream")
-    public void finishStream() {
-        streamService.finishStream();
+    public void finishStream(@RequestBody StreamInfoDto dto) {
+        streamService.finishStream(dto);
     }
 }
