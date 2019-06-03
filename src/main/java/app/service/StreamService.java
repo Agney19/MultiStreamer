@@ -42,6 +42,7 @@ public class StreamService {
 	}
 
 	public void finishStream(StreamInfoDto dto) {
+		PlatformThread
 		if (youtubeThread == null || !youtubeThread.isAlive()) {
 			LOGGER.warn("Unable to finish inactive stream");
 			return;
