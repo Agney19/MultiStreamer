@@ -10,11 +10,21 @@ import java.math.BigDecimal;
 
 @Getter
 @ToString
-@AllArgsConstructor
 public final class BroadcastInfoDto {
-    private String broadcastTitle;
-    private String streamTitle;
+    private final String broadcastTitle;
+    private final String streamTitle;
     // new DateTime("2019-06-03T12:28:00.000Z")
-    private String startDateTime;
-    private String endDateTime;
+    private final String startDateTime;
+    private final String endDateTime;
+
+    @JsonCreator
+    public BroadcastInfoDto(@JsonProperty("broadcastTitle") String broadcastTitle,
+                            @JsonProperty("streamTitle") String streamTitle,
+                            @JsonProperty("startDateTime") String startDateTime,
+                            @JsonProperty("endDateTime") String endDateTime) {
+        this.broadcastTitle = broadcastTitle;
+        this.streamTitle = streamTitle;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+    }
 }

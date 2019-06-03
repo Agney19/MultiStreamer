@@ -17,10 +17,12 @@ public class StreamService {
     private BroadcastManager broadcastManager;
 
     public void createBroadcast(BroadcastInfoDto dto) {
+        System.out.println(dto);
         broadcastManager.createBroadcast(dto);
     }
 
     public void startStream(StreamInfoDto dto) {
+        System.out.println(dto);
         try {
             FFmpeg ffmpeg = new FFmpeg();
             FFprobe ffprobe = new FFprobe();

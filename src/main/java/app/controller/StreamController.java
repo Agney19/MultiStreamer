@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.dto.BroadcastInfoDto;
+import app.dto.StreamInfoDto;
 import app.service.StreamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +14,13 @@ public class StreamController {
     private StreamService streamService;
 
     @PostMapping("broadcast")
-    public void createBroadcast() {
-        streamService.createBroadcast(null);
+    public void createBroadcast(@RequestBody BroadcastInfoDto dto) {
+        streamService.createBroadcast(dto);
     }
 
     @PutMapping("stream")
-    public void startStream() {
-        streamService.startStream(null);
+    public void startStream(@RequestBody StreamInfoDto dto) {
+        streamService.startStream(dto);
     }
 
     @DeleteMapping("stream")
