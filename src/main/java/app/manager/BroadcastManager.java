@@ -41,12 +41,13 @@ public class BroadcastManager {
                     .setApplicationName("youtube-cmdline-createbroadcast-sample").build();
 
             String title = dto.getBroadcastTitle();
-            System.out.println("You chose " + title + " for broadcast title.");
+            System.out.println("Broadcast [title = " + title + "] created");
 
             // Create a snippet with the title and scheduled start and end
             // times for the broadcast. Currently, those times are hard-coded.
             LiveBroadcastSnippet broadcastSnippet = new LiveBroadcastSnippet();
             broadcastSnippet.setTitle(title);
+            broadcastSnippet.setDescription(dto.getBroadcastDesc());
             broadcastSnippet.setScheduledStartTime(new DateTime(dto.getStartDateTime()));
             broadcastSnippet.setScheduledEndTime(new DateTime(dto.getEndDateTime()));
 

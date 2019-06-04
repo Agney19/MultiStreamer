@@ -11,8 +11,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-@Component
 public class YoutubeThread extends AbstractPlatformThread {
+
+	public YoutubeThread(StreamInfoDto dto) {
+		super(dto);
+	}
+
 	@Override
 	public Platform getPlatform() {
 		return Platform.YT;

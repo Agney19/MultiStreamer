@@ -11,11 +11,17 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 
-@Setter
 public abstract class AbstractPlatformThread extends Thread implements PlatformSpecific {
 
 	private String inputUrl;
 	private String outputUrl;
+
+	public AbstractPlatformThread(StreamInfoDto dto) {
+		Assert.notNull(dto, "dto is null");
+
+		inputUrl = dto.getInputUrl();
+		outputUrl = dto.getOutputUrl();
+	}
 
 	@Override
 	public void run() {
@@ -26,7 +32,7 @@ public abstract class AbstractPlatformThread extends Thread implements PlatformS
 			FFprobe ffprobe = new FFprobe();
 			FFmpegBuilder builder = new FFmpegBuilder()
 					.setInput(inputUrl)
-					.readAtNativeFrameRate()
+//					.readAtNativeFrameRate()
 					.addOutput(outputUrl)
 					.setFormat("flv")
 					.setAudioCodec("copy")
