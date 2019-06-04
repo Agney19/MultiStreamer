@@ -20,17 +20,34 @@ public class ThreadManager {
 	private List<AbstractPlatformThread> threadPool = new ArrayList<>();
 
 	@Nullable
-	public AbstractPlatformThread getThread(StreamInfoDto dto) {
+	public AbstractPlatformThread getThread(StreamInfoDto dto, String operation) {
 		Assert.notNull(dto, "dto is null");
 
-		if (threadPool.stream().anyMatch(t -> Objects.equals(dto.getPlatform(),t.getPlatform()) && t.isAlive())) {
-			LOGGER.warn("Only one broadcast is allowed! Wait for the end of its execution or finish it intentionally");
-		    return null;
-		} else {
-			AbstractPlatformThread thread = getCorrespondingThread(dto);
-			threadPool.add(thread);
-			return thread;
-		}
+        AbstractPlatformThread thread;
+        thread = threadPool.stream()
+                .filter(t -> Objects.equals(dto.getPlatform(), t.getPlatform()) && t.isAlive())
+                .findFirst()
+                .orElse(null);
+        if (operation.equals("delete")) {
+            if (thread == null) {
+                LOGGER.warn("No corresponding thread exists!");
+                return null;
+            } else {
+                threadPool.remove(thread);
+                return thread;
+            }
+        } else if (operation.equals("create")) {
+            if (thread != null) {
+                LOGGER.warn("Only one broadcast is allowed! Wait for the end of its execution or finish it intentionally");
+                return null;
+            } else {
+                thread = getCorrespondingThread(dto);
+                threadPool.add(thread);
+                return thread;
+            }
+        } else {
+            throw new IllegalArgumentException("Unknown operation!");
+        }
 	}
 
 	private AbstractPlatformThread getCorrespondingThread(StreamInfoDto dto) {

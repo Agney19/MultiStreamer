@@ -1,6 +1,7 @@
 package app.threads;
 
 import app.dto.StreamInfoDto;
+import lombok.Getter;
 import lombok.Setter;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -11,6 +12,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 
+@Getter
 public abstract class AbstractPlatformThread extends Thread implements PlatformSpecific {
 
 	private String inputUrl;

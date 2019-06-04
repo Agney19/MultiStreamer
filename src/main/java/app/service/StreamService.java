@@ -36,15 +36,15 @@ public class StreamService {
     }
 
     public void startStream(StreamInfoDto dto) {
-        AbstractPlatformThread thread = threadManager.getThread(dto);
+        AbstractPlatformThread thread = threadManager.getThread(dto, "create");
         if (thread != null) {
             thread.start();
-            LOGGER.info("Stream started");
+            LOGGER.info("Stream started on {}", dto.getPlatform());
         }
     }
 
     public void finishStream(StreamInfoDto dto) {
-        AbstractPlatformThread thread = threadManager.getThread(dto);
+        AbstractPlatformThread thread = threadManager.getThread(dto, "delete");
         if (thread == null) {
             LOGGER.warn("Unable to finish inactive stream");
             return;
