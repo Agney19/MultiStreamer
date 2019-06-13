@@ -1,6 +1,7 @@
 package app.service;
 
 import app.dto.BroadcastInfoDto;
+import app.dto.StreamDoubleInfoDto;
 import app.dto.StreamInfoDto;
 import app.manager.BroadcastManager;
 import app.threads.AbstractPlatformThread;
@@ -71,6 +72,14 @@ public class StreamService {
             thread.stop();
         } catch (RuntimeException | IOException | InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void startDoubleStream(StreamDoubleInfoDto dto) {
+        AbstractPlatformThread thread = threadManager.getThread(dto, "create");
+        if (thread != null) {
+            thread.start();
+            LOGGER.info("Stream started on {}", dto.getPlatform());
         }
     }
 }

@@ -1,5 +1,6 @@
 package app.threads;
 
+import app.dto.StreamDoubleInfoDto;
 import app.dto.StreamInfoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +16,13 @@ import static app.threads.Platform.YT;
 
 @Service
 public class ThreadManager {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ThreadManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadManager.class);
 
-	private List<AbstractPlatformThread> threadPool = new ArrayList<>();
+    private List<AbstractPlatformThread> threadPool = new ArrayList<>();
 
-	@Nullable
-	public AbstractPlatformThread getThread(StreamInfoDto dto, String operation) {
-		Assert.notNull(dto, "dto is null");
+    @Nullable
+    public AbstractPlatformThread getThread(StreamInfoDto dto, String operation) {
+        Assert.notNull(dto, "dto is null");
 
         AbstractPlatformThread thread;
         thread = threadPool.stream()
@@ -48,18 +49,21 @@ public class ThreadManager {
         } else {
             throw new IllegalArgumentException("Unknown operation!");
         }
-	}
+    }
 
-	private AbstractPlatformThread getCorrespondingThread(StreamInfoDto dto) {
-		switch(dto.getPlatform()) {
-			case YT:
-				return new YoutubeThread(dto);
-			case FB:
-			    return new FacebookThread(dto);
+    private AbstractPlatformThread getCorrespondingThread(StreamInfoDto dto) {
+        switch (dto.getPlatform()) {
+            case YT:
+                if (dto instanceof StreamDoubleInfoDto) {
+                    return new YoutubeDoubleThread((StreamDoubleInfoDto) dto);
+                }
+                return new YoutubeThread(dto);
+            case FB:
+                return new FacebookThread(dto);
             case VK:
                 return new VkontakteThread(dto);
             default:
                 throw new IllegalArgumentException("Unknown platform type supplied!");
-		}
-	}
+        }
+    }
 }

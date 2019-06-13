@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.dto.BroadcastInfoDto;
+import app.dto.StreamDoubleInfoDto;
 import app.dto.StreamInfoDto;
 import app.service.StreamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class StreamController {
         streamService.createBroadcast(dto);
     }
 
-    @PutMapping("stream")
+    @PostMapping("stream")
     public void startStream(@RequestBody StreamInfoDto dto) {
         streamService.startStream(dto);
     }
@@ -26,5 +27,10 @@ public class StreamController {
     @DeleteMapping("stream")
     public void finishStream(@RequestBody StreamInfoDto dto) {
         streamService.finishStream(dto);
+    }
+
+    @PostMapping("stream/double")
+    public void startDoubleStream(@RequestBody StreamDoubleInfoDto dto) {
+        streamService.startDoubleStream(dto);
     }
 }

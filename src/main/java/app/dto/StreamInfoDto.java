@@ -9,7 +9,8 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public final class StreamInfoDto {
+public class StreamInfoDto {
+
     private final String inputUrl;
     private final String outputUrl;
 	private final Platform platform;
