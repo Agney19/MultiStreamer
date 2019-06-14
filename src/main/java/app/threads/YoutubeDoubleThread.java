@@ -10,6 +10,8 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.job.FFmpegJob;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class YoutubeDoubleThread extends AbstractPlatformThread {
@@ -23,23 +25,6 @@ public class YoutubeDoubleThread extends AbstractPlatformThread {
 
     @Override
     public void run() {
-//        try {
-////            final Process p = new ProcessBuilder("cmd1", "arg1", "arg2").start();
-////            final int retval = p.waitFor();
-//            final String command = "ffmpeg " +
-//                    "-i " + getInputUrl() + " " +
-//                    "-i " + getSecInputUrl() + " " +
-//                    "-filter_complex " +
-//                    "\"[0:v][1:v]hstack=inputs=2[v]; " +
-//                    "[0:a][1:a]amerge[a]\" " +
-//                    "-map \"[v]\" -map \"[a]\" -ac 2 " +
-//                    "-f flv " + getOutputUrl();
-//            System.out.println(command);
-//			Runtime.getRuntime().exec(command).waitFor();
-//        } catch (RuntimeException | IOException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         try {
             FFmpeg ffmpeg = new FFmpeg();
             FFprobe ffprobe = new FFprobe();
@@ -48,26 +33,43 @@ public class YoutubeDoubleThread extends AbstractPlatformThread {
                     .addInput(getSecInputUrl())
                     .setComplexFilter("[0:v][1:v]hstack=inputs=2[v]; " +
                             "[0:a][1:a]amerge[a]")
-//                    .addExtraArgs("--map '[v]'")
-//                    .addExtraArgs("--map '[a]'")
                     .addOutput(getOutputUrl())
                     .setAudioChannels(2)
                     .setFormat("flv")
-//                    .addExtraArgs("-i rtmp://127.0.0.1:1935/live " +
-//                            "-i rtmp://127.0.0.1:1935/live " +
-//                            "-filter_complex \"[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]\" " +
-//                            "-map \"[v]\" " +
-//                            "-map \"[a]\" " +
-//                            "-ac 2 " +
-//                            "-f flv")
-//                    .addOutput(getOutputUrl())
+                    .addExtraArgs("-map", "[v]")
+                    .addExtraArgs("-map", "[a]")
                     .done();
             FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
             FFmpegJob job = executor.createJob(builder);
             job.run();
 
+//            List<String> cmds = new ArrayList<>();
+//            cmds.add("ffmpeg");
+//            cmds.add("-y");
+//            cmds.add("-v");
+//            cmds.add("error");
+//            cmds.add("-i");
+//            cmds.add(getInputUrl());
+//            cmds.add("-i");
+//            cmds.add(getSecInputUrl());
+//            cmds.add("-filter_complex");
+//            cmds.add("[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]");
+//            cmds.add("-map");
+//            cmds.add("[v]");
+//            cmds.add("-map");
+//            cmds.add("[a]");
+//            cmds.add("-ac");
+//            cmds.add("2");
+//            cmds.add("-f");
+//            cmds.add("flv");
+//            cmds.add(getOutputUrl());
+//            System.out.println(cmds.stream().reduce((c1, c2) -> c1 + " " + c2).orElse(null));
+//            ProcessBuilder pb = new ProcessBuilder(cmds);
+//            pb.start().waitFor();
 
-        } catch (RuntimeException | IOException ignored) {
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
